@@ -119,6 +119,17 @@ function getReasonForReRender (prevProps, prevState, nextProps, nextState) {
   return 'unknown reason for update, possibly from forceUpdate()';
 }
 
+
+/*
+ * Get Component displayName
+ *
+ * @param object Component
+ * @return string
+ */
+function getDisplayName(Component) {
+  return Component.displayName || Component.name || 'Component'
+}
+
 class RenderLog extends Component {
   static displayName = 'RenderLog';
   shouldComponentUpdate = shouldPureComponentUpdate;
@@ -266,7 +277,8 @@ export default function createRenderVisualizer (shouldInstrumentComponent = () =
           posTop: 0,
           posLeft: 0
         });
-        addToRenderLog(this, 'Initial Render');
+        const componentName = getDisplayName(ReactClass)
+        addToRenderLog(this, componentName + ' Initial Render');
 
         if (old.componentDidMount) {
           return old.componentDidMount.apply(this, [...arguments]);
