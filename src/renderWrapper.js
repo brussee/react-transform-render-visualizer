@@ -249,7 +249,7 @@ class RenderLog extends Component {
 
         // round coordinates down to prevent blurring
         transform: `translate3d(${this.props.posLeft | 0}px, ${this.props.posTop | 0}px, 0)`
-      }} onClick={this.onClick} onMouseDown={this.onMouseDown} onMouseUp={this.onMouseUp} onMouseMove={this.onMouseMove}>
+      }} onClick={e => this.onClick(e)} onMouseDown={e => this.onMouseDown(e)} onMouseUp={e => this.onMouseUp(e)} onMouseMove={e => this.onMouseMove(e)}>
         <div style={{ display: this.state.showDetails ? 'none' : 'block' }}>{ this.props.count }</div>
         <div style={{ display: this.state.showDetails ? 'block' : 'none' }}>
           <div>
