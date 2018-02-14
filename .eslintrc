@@ -24,7 +24,7 @@
     "eqeqeq": [1, "smart"],
     "indent": [2, 2],
     "key-spacing": 0,
-    "keyword-spacing": [1, {"space-after-keywords": true, "space-return-throw-case": true}],
+    "keyword-spacing": [1, {"before": true, "after": true}],
     "new-cap": [1, {"capIsNew": false, "newIsCap": true}],
     "new-parens": 0,
     "no-cond-assign": 0,
