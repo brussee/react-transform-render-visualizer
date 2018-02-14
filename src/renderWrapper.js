@@ -150,6 +150,22 @@ class RenderLog extends Component {
   state = {
     showDetails: false
   };
+  mousePosition;
+  offset = {
+    left: 0,
+    top: 0
+  };
+  div;
+  isDown = false;
+
+  constructor (props) {
+    super(props);
+
+    this.onClick = this.onClick.bind(this);
+    this.onMouseDown = this.onMouseDown.bind(this);
+    this.onMouseUp = this.onMouseUp.bind(this);
+    this.onMouseMove = this.onMouseMove.bind(this);
+  }
 
   componentWillMount () {
     this.highlightChange(RenderVisualizer.STATE_CHANGES.MOUNT);
@@ -187,9 +203,44 @@ class RenderLog extends Component {
       });
     }
   }
+
+  setRef (element) {
+    this.div = element;
+  }
+
+  onClick (event) {
+    this.setState(state => ({
+      showDetails: !state.showDetails
+    }));
+  }
+
+  onMouseDown (event) {
+    this.isDown = true;
+    this.offset = {
+      left: this.div.offsetLeft - event.clientX,
+      top: this.div.offsetTop - event.clientY
+    };
+  }
+
+  onMouseUp (event) {
+    this.isDown = false;
+  }
+
+  onMouseMove (event) {
+    event.preventDefault();
+    if (this.isDown) {
+      this.mousePosition = {
+        x: event.clientX,
+        y: event.clientY
+      };
+      this.div.style.left = (this.mousePosition.x + this.offset.left) + 'px';
+      this.div.style.top  = (this.mousePosition.y + this.offset.top) + 'px';
+    }
+  }
+
   render () {
     return (
-      <div style={{
+      <div ref={this.setRef} style={{
         ...RenderVisualizer.styling.renderLog,
 
         // go to the top of everything if we're showing details
@@ -197,11 +248,7 @@ class RenderLog extends Component {
 
         // round coordinates down to prevent blurring
         transform: `translate3d(${this.props.posLeft | 0}px, ${this.props.posTop | 0}px, 0)`
-      }} onClick={() => {
-        this.setState({
-          showDetails: !this.state.showDetails
-        });
-      }}>
+      }} onClick={this.onClick} onMouseDown={this.onMouseDown} onMouseUp={this.onMouseUp} onMouseMove={this.onMouseMove}>
         <div style={{ display: this.state.showDetails ? 'none' : 'block' }}>{ this.props.count }</div>
         <div style={{ display: this.state.showDetails ? 'block' : 'none' }}>
           <div>
