@@ -126,8 +126,8 @@ function getReasonForReRender (prevProps, prevState, nextProps, nextState) {
  * @param object Component
  * @return string
  */
-function getDisplayName(Component) {
-  return Component.displayName || Component.name || 'Component'
+function getDisplayName (Component) {
+  return Component.displayName || Component.name || 'Component';
 }
 
 class RenderLog extends Component {
@@ -211,7 +211,7 @@ class RenderLog extends Component {
               })
             }
           </div>
-          <div style={RenderVisualizer.styling.renderLogDetailNode}></div>
+          <div style={RenderVisualizer.styling.renderLogDetailNode} />
         </div>
       </div>
     );
@@ -277,7 +277,7 @@ export default function createRenderVisualizer (shouldInstrumentComponent = () =
           posTop: 0,
           posLeft: 0
         });
-        const componentName = getDisplayName(ReactClass)
+        const componentName = getDisplayName(ReactClass);
         addToRenderLog(this, componentName + ' Initial Render');
 
         if (old.componentDidMount) {
@@ -301,5 +301,5 @@ export default function createRenderVisualizer (shouldInstrumentComponent = () =
 
       return ReactClass;
     };
-  }
+  };
 }
