@@ -1,6 +1,6 @@
 {
   "name": "react-transform-render-visualizer-fork",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Render visualizer for ReactJS",
   "main": "lib/index.js",
   "files": [
