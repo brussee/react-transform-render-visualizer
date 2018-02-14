@@ -161,6 +161,7 @@ class RenderLog extends Component {
   constructor (props) {
     super(props);
 
+    this.setRef = this.setRef.bind(this);
     this.onClick = this.onClick.bind(this);
     this.onMouseDown = this.onMouseDown.bind(this);
     this.onMouseUp = this.onMouseUp.bind(this);
