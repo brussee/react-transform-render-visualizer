@@ -162,7 +162,7 @@ class RenderLog extends Component {
     this.setRef = this.setRef.bind(this);
     this.onClick = this.onClick.bind(this);
     this.onDoubleClick = this.onDoubleClick.bind(this);
-    this.onDragStart = this.onDragStart.bind(this);
+    this.onMouseDown = this.onMouseDown.bind(this);
     this.onDrag = this.onDrag.bind(this);
   }
 
@@ -227,7 +227,7 @@ class RenderLog extends Component {
     }));
   }
 
-  onDragStart (event) {
+  onMouseDown (event) {
     this.offset = {
       top: this.div.offsetTop - event.clientY,
       left: this.div.offsetLeft - event.clientX
@@ -244,7 +244,7 @@ class RenderLog extends Component {
       return null;
     }
     return (
-      <div ref={this.setRef} draggable='true' style={{
+      <div ref={this.setRef} style={{
         ...RenderVisualizer.styling.renderLog,
 
         // go to the top of everything if we're showing details
@@ -255,7 +255,7 @@ class RenderLog extends Component {
 
         // round coordinates down to prevent blurring
         transform: `translate3d(${this.props.posLeft | 0}px, ${this.props.posTop | 0}px, 0)`
-      }} onClick={e => this.onClick(e)} onDoubleClick={e => this.onDoubleClick(e)} onDragStart={e => this.onDragStart(e)} onDrag={e => this.onDrag(e)}>
+      }} onClick={e => this.onClick(e)} onDoubleClickCapture={e => this.onDoubleClick(e)} onMouseDown={e => this.onMouseDown(e)} onDrag={e => this.onDrag(e)}>
         <div style={{ display: this.state.showDetails ? 'none' : 'block' }}>{ this.props.count }</div>
         <div style={{ display: this.state.showDetails ? 'block' : 'none' }}>
           <div>
