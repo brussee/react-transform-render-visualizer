@@ -148,28 +148,34 @@ class RenderLog extends Component {
   };
 
   state = {
+    show: true,
     showDetails: false
   };
-  mousePosition;
   offset = {
-    left: 0,
-    top: 0
+    top: 0,
+    left: 0
   };
-  div;
-  isDown = false;
 
   constructor (props) {
     super(props);
 
     this.setRef = this.setRef.bind(this);
     this.onClick = this.onClick.bind(this);
-    this.onMouseDown = this.onMouseDown.bind(this);
-    this.onMouseUp = this.onMouseUp.bind(this);
-    this.onMouseMove = this.onMouseMove.bind(this);
+    this.onDoubleClick = this.onDoubleClick.bind(this);
+    this.onDragStart = this.onDragStart.bind(this);
+    this.onDrag = this.onDrag.bind(this);
   }
 
   componentWillMount () {
     this.highlightChange(RenderVisualizer.STATE_CHANGES.MOUNT);
+  }
+
+  componentWillUpdate (nextProps) {
+    if (this.props.count !== nextProps.count) {
+      this.setState(state => ({
+        show: true
+      }));
+    }
   }
 
   componentDidUpdate (prevProps) {
@@ -215,41 +221,41 @@ class RenderLog extends Component {
     }));
   }
 
-  onMouseDown (event) {
-    this.isDown = true;
+  onDoubleClick (event) {
+    this.setState(state => ({
+      show: !state.show
+    }));
+  }
+
+  onDragStart (event) {
     this.offset = {
-      left: this.div.offsetLeft - event.clientX,
-      top: this.div.offsetTop - event.clientY
+      top: this.div.offsetTop - event.clientY,
+      left: this.div.offsetLeft - event.clientX
     };
   }
 
-  onMouseUp (event) {
-    this.isDown = false;
-  }
-
-  onMouseMove (event) {
-    event.preventDefault();
-    if (this.isDown) {
-      this.mousePosition = {
-        x: event.clientX,
-        y: event.clientY
-      };
-      this.div.style.left = (this.mousePosition.x + this.offset.left) + 'px';
-      this.div.style.top  = (this.mousePosition.y + this.offset.top) + 'px';
-    }
+  onDrag (event) {
+    this.div.style.top  = (this.offset.top + event.clientY) + 'px';
+    this.div.style.left = (this.offset.left + event.clientX) + 'px';
   }
 
   render () {
+    if (!this.state.show) {
+      return null;
+    }
     return (
-      <div ref={this.setRef} style={{
+      <div ref={this.setRef} draggable='true' style={{
         ...RenderVisualizer.styling.renderLog,
 
         // go to the top of everything if we're showing details
         zIndex: this.state.showDetails ? 10001 : 10000,
 
+        // selectable text only if we're showing details
+        userSelect: this.state.showDetails ? undefined : 'none',
+
         // round coordinates down to prevent blurring
         transform: `translate3d(${this.props.posLeft | 0}px, ${this.props.posTop | 0}px, 0)`
-      }} onClick={e => this.onClick(e)} onMouseDown={e => this.onMouseDown(e)} onMouseUp={e => this.onMouseUp(e)} onMouseMove={e => this.onMouseMove(e)}>
+      }} onClick={e => this.onClick(e)} onDoubleClick={e => this.onDoubleClick(e)} onDragStart={e => this.onDragStart(e)} onDrag={e => this.onDrag(e)}>
         <div style={{ display: this.state.showDetails ? 'none' : 'block' }}>{ this.props.count }</div>
         <div style={{ display: this.state.showDetails ? 'block' : 'none' }}>
           <div>
