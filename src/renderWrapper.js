@@ -151,9 +151,9 @@ class RenderLog extends Component {
     show: true,
     showDetails: false
   };
-  offset = {
-    top: 0,
-    left: 0
+  mousePos = {
+    screenX: 0,
+    screenY: 0
   };
 
   constructor (props) {
@@ -228,15 +228,28 @@ class RenderLog extends Component {
   }
 
   onMouseDown (event) {
-    this.offset = {
-      top: this.div.offsetTop - event.clientY,
-      left: this.div.offsetLeft - event.clientX
+    this.mouseDown = true;
+    this.mousePos = {
+      screenX: event.screenX,
+      screenY: event.screenY
     };
+    this.div.style.cursor = 'move';
   }
 
-  onDrag (event) {
-    this.div.style.top  = (this.offset.top + event.clientY) + 'px';
-    this.div.style.left = (this.offset.left + event.clientX) + 'px';
+  onMouseMove (event) {
+    if (this.mouseDown) {
+      this.div.style.left += (event.screenX - this.mousePos.screenX) + 'px';
+      this.div.style.top  += (event.screenY - this.mousePos.screenY) + 'px';
+      this.mousePos = {
+        screenX: event.screenX,
+        screenY: event.screenY
+      };
+    }
+  }
+
+  onMouseUp (event) {
+    this.mouseDown = false;
+    this.div.style.cursor = 'initial';
   }
 
   render () {
@@ -255,7 +268,7 @@ class RenderLog extends Component {
 
         // round coordinates down to prevent blurring
         transform: `translate3d(${this.props.posLeft | 0}px, ${this.props.posTop | 0}px, 0)`
-      }} onClick={e => this.onClick(e)} onDoubleClickCapture={e => this.onDoubleClick(e)} onMouseDown={e => this.onMouseDown(e)} onDrag={e => this.onDrag(e)}>
+      }} onClick={e => this.onClick(e)} onDoubleClickCapture={e => this.onDoubleClick(e)} onMouseDown={e => this.onMouseDown(e)} onMouseMove={e => this.onMouseMove(e)} onMouseUp={e => this.onMouseUp(e)}>
         <div style={{ display: this.state.showDetails ? 'none' : 'block' }}>{ this.props.count }</div>
         <div style={{ display: this.state.showDetails ? 'block' : 'none' }}>
           <div>
