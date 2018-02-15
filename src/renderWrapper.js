@@ -151,10 +151,12 @@ class RenderLog extends Component {
     show: true,
     showDetails: false
   };
-  mousePos = {
-    screenX: 0,
-    screenY: 0
+  divOffset = {
+    top: 0,
+    left: 0
   };
+  div;
+  isMouseDown = false;
 
   constructor (props) {
     super(props);
@@ -229,27 +231,24 @@ class RenderLog extends Component {
   }
 
   onMouseDown (event) {
-    this.mouseDown = true;
-    this.mousePos = {
-      screenX: event.screenX,
-      screenY: event.screenY
+    this.isMouseDown = true;
+    this.offset = {
+      top:  this.div.offsetTop  - event.clientY,
+      left: this.div.offsetLeft - event.clientX
     };
     this.div.style.cursor = 'move';
   }
 
   onMouseMove (event) {
-    if (this.mouseDown) {
-      this.div.style.left += (event.screenX - this.mousePos.screenX) + 'px';
-      this.div.style.top  += (event.screenY - this.mousePos.screenY) + 'px';
-      this.mousePos = {
-        screenX: event.screenX,
-        screenY: event.screenY
-      };
+    event.preventDefault();
+    if (this.isMouseDown) {
+      this.div.style.top  = (this.offset.top  + event.clientY) + 'px';
+      this.div.style.left = (this.offset.left + event.clientX) + 'px';
     }
   }
 
   onMouseUp (event) {
-    this.mouseDown = false;
+    this.isMouseDown = false;
     this.div.style.cursor = 'initial';
   }
 
