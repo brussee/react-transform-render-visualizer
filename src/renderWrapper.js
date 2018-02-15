@@ -163,7 +163,8 @@ class RenderLog extends Component {
     this.onClick = this.onClick.bind(this);
     this.onDoubleClick = this.onDoubleClick.bind(this);
     this.onMouseDown = this.onMouseDown.bind(this);
-    this.onDrag = this.onDrag.bind(this);
+    this.onMouseMove = this.onMouseMove.bind(this);
+    this.onMouseUp = this.onMouseUp.bind(this);
   }
 
   componentWillMount () {
